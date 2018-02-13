@@ -15,7 +15,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'App\Events\Event' => [
             'App\Listeners\EventListener',
-            \SocialiteProviders\Manager\SocialiteWasCalled::class =>[        'SocialiteProviders\Spotify\SpotifyExtendSocialite@handle',
+            \SocialiteProviders\Manager\SocialiteWasCalled::class =>[
                 'SocialiteProviders\Spotify\SpotifyExtendSocialite@handle',
             ],
         ],
