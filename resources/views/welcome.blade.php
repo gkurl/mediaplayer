@@ -16,14 +16,13 @@
 <div class="container">
     <div id="login">
         <h1>Login</h1>
-        <a href="/login" class="btn btn-primary">Log in with Spotify</a>
+        <a href="{{url('/login/spotify')}}" class="btn btn-primary">Log in with Spotify</a>
     </div>
     <div id="loggedin">
         <div id="user-profile">
         </div>
         <div id="oauth">
         </div>
-        <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
