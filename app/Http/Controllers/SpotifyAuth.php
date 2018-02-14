@@ -16,9 +16,15 @@ class SpotifyAuth extends Controller
 
     }
 
-/*    public function spotifyCallback(\GuzzleHttp\Client $httpClient){
+    public function spotifyCallback(\GuzzleHttp\Client $httpClient){
 
-        $response = $httpClient->post('https://accounts.spotify.com/authorize',
+        if(isset($_GET['error'])){
+
+            return redirect('/denied');
+
+        }
+
+       /* $response = $httpClient->post('https://accounts.spotify.com/authorize',
             ['form_params' =>
             ['client_id'=>env('SPOTIFY_CLIENT_ID'),
                 'client_secret' => env('SPOTIFY_CLIENT_SECRET'),
@@ -27,6 +33,10 @@ class SpotifyAuth extends Controller
                 'redirect_uri'=>env('REDIRECT_URI')
 
                         ]
-                 ]);
-    }*/
+                 ]);*/
+    }
+
+    public function denied(){
+        return view('denied');
+    }
 }
