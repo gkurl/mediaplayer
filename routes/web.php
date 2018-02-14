@@ -16,3 +16,5 @@ Route::get('/', function () {
 });
 
 Route::get('/login/spotify', 'SpotifyAuth@spotifyLogin');
+Route::get('/callback', 'SpotifyAuth@spotifyCallback');
+
