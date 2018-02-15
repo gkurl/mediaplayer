@@ -1,1 +1,5 @@
-<?php
+@include('header')
+
+<body>
+Test
+</body>

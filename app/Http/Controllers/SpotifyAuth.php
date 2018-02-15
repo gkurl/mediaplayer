@@ -10,33 +10,50 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SpotifyAuth extends Controller
 {
-    public function spotifyLogin(){
+    public function spotifyLogin()
+    {
 
-        return Socialite::with('spotify')->redirect();
+        //Use Socialite to access Spotify authorisation
+
+        return Socialite::with('spotify')->scopes(['user-top-read'])->redirect();
 
     }
 
-    public function spotifyCallback(\GuzzleHttp\Client $httpClient){
+    public function spotifyCallback(\GuzzleHttp\Client $httpClient)
+    {
 
-        if(isset($_GET['error'])){
+        //if user cancels or login fails return to a denied page
+        if (isset($_GET['error'])) {
 
             return redirect('/denied');
 
         }
 
-       /* $response = $httpClient->post('https://accounts.spotify.com/authorize',
-            ['form_params' =>
-            ['client_id'=>env('SPOTIFY_CLIENT_ID'),
-                'client_secret' => env('SPOTIFY_CLIENT_SECRET'),
-                'grant_type'=>'authorization_code',
-                'code' => $_GET['code'],
-                'redirect_uri'=>env('REDIRECT_URI')
+        //as per Spotify doc - once user has approved you must make post request to https://accounts.spotify.com/api/token to receive tokens
 
-                        ]
-                 ]);*/
+        $response = $httpClient->post('https://accounts.spotify.com/api/token',
+            ['form_params' =>
+                ['client_id' => env('SPOTIFY_KEY'),
+                    'client_secret' => env('SPOTIFY_SECRET'),
+                    'grant_type' => 'authorization_code',
+                    'code' => $_GET['code'],
+                    'redirect_uri' => env('SPOTIFY_REDIRECT_URI')
+                ]
+            ]);
+
+        //Store returned tokens in Session
+
+
+        /*session(['token_access' => json_decode($response->getBody())->access_token]);
+        session(['token_refresh' => json_decode($response->getBody())->refresh_token]);*/
+
     }
+
 
     public function denied(){
+
         return view('denied');
     }
+
+
 }
