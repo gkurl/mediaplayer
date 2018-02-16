@@ -44,8 +44,8 @@ class SpotifyAuth extends Controller
         //Store returned tokens in Session
 
 
-        /*session(['token_access' => json_decode($response->getBody())->access_token]);
-        session(['token_refresh' => json_decode($response->getBody())->refresh_token]);*/
+        session(['token_access' => json_decode($response->getBody())->access_token]);
+        session(['token_refresh' => json_decode($response->getBody())->refresh_token]);
 
     }
 
