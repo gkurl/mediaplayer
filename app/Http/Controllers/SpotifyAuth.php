@@ -2,50 +2,54 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
-
+use SpotifyWebAPI;
 use Laravel\Socialite\Facades\Socialite;
+
 
 class SpotifyAuth extends Controller
 {
+
     public function spotifyLogin()
     {
+        //set required params for spotify api from env file.
 
-        //Use Socialite to access Spotify authorisation
+        $client_id= env('SPOTIFY_KEY');
+        $client_secret= env('SPOTIFY_SECRET');
+        $redirect_uri= env('SPOTIFY_REDIRECT_URI');
 
-        return Socialite::with('spotify')->scopes(['user-top-read'])->redirect();
+        $session = new SpotifyWebAPI\Session(
+
+            $client_id,
+            $client_secret,
+            $redirect_uri
+        );
+
+        //Redirect to authorisation page.
+
+        header('Location: ' . $session->getAuthorizeUrl());
 
     }
 
-    public function spotifyCallback(\GuzzleHttp\Client $httpClient)
-    {
+    public function retrieveTokens(){
 
-        //if user cancels or login fails return to a denied page
-        if (isset($_GET['error'])) {
+        $session = new SpotifyWebAPI\Session(
 
-            return redirect('/denied');
+            $client_id = env('SPOTIFY_KEY'),
+            $client_secret = env('SPOTIFY_SECRET'),
+            $redirect_url = env('SPOTIFY_REDIRECT_URI')
+        );
 
-        }
+        //Request access token from Spotify
 
-        //as per Spotify doc - once user has approved you must make post request to https://accounts.spotify.com/api/token to receive tokens
+        $session->requestAccessToken($_GET['code']);
 
-        $response = $httpClient->post('https://accounts.spotify.com/api/token',
-            ['form_params' =>
-                ['client_id' => env('SPOTIFY_KEY'),
-                    'client_secret' => env('SPOTIFY_SECRET'),
-                    'grant_type' => 'authorization_code',
-                    'code' => $_GET['code'],
-                    'redirect_uri' => env('SPOTIFY_REDIRECT_URI')
-                ]
-            ]);
+        $accessToken = $session->getAccessToken();
 
-        //Store returned tokens in Session
-
-
-        session(['token_access' => json_decode($response->getBody())->access_token]);
-        session(['token_refresh' => json_decode($response->getBody())->refresh_token]);
+        //Store access token in DB
 
     }
 
