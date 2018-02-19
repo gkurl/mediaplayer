@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Client;
 use SpotifyWebAPI;
-use Laravel\Socialite\Facades\Socialite;
 
 
 class SpotifyAuth extends Controller
@@ -50,6 +47,8 @@ class SpotifyAuth extends Controller
         $accessToken = $session->getAccessToken();
 
         //Store access token in DB
+
+
 
     }
 
