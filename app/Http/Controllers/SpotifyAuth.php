@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Tokens;
 use Illuminate\Http\Request;
 use SpotifyWebAPI;
 
@@ -12,11 +13,13 @@ class SpotifyAuth extends Controller
 
     public function spotifyLogin()
     {
+
+
         //set required params for spotify api from env file.
 
-        $client_id= env('SPOTIFY_KEY');
-        $client_secret= env('SPOTIFY_SECRET');
-        $redirect_uri= env('SPOTIFY_REDIRECT_URI');
+        $client_id = env('SPOTIFY_KEY');
+        $client_secret = env('SPOTIFY_SECRET');
+        $redirect_uri = env('SPOTIFY_REDIRECT_URI');
 
         $session = new SpotifyWebAPI\Session(
 
@@ -25,9 +28,14 @@ class SpotifyAuth extends Controller
             $redirect_uri
         );
 
+        //Define scopes for access
+
+        $options = ['scope' => ['user-top-read', 'playlist-read-private', 'user-read-private']];
+
         //Redirect to authorisation page.
 
-        header('Location: ' . $session->getAuthorizeUrl());
+        return redirect($session->getAuthorizeUrl());
+
 
     }
 
@@ -45,10 +53,22 @@ class SpotifyAuth extends Controller
         $session->requestAccessToken($_GET['code']);
 
         $accessToken = $session->getAccessToken();
+        $refreshToken = $session->getRefreshToken();
 
-        //Store access token in DB
+        //Request refresh token from Spotify
 
+        $session->refreshAccessToken($refreshToken);
 
+        //Store access and refresh tokens in DB
+
+        $token = new Tokens;
+        $token->access_token = $accessToken;
+        $token->refresh_token = $refreshToken;
+        $token->save();
+
+        //Check for access token time out and if timed out, obtain new code
+
+        return view('mystats');
 
     }
 
