@@ -34,7 +34,7 @@ class SpotifyAuth extends Controller
 
         //Redirect to authorisation page.
 
-        return redirect($session->getAuthorizeUrl());
+        return redirect($session->getAuthorizeUrl($options));
 
 
     }
@@ -67,6 +67,7 @@ class SpotifyAuth extends Controller
         $token->save();
 
         //Check for access token time out and if timed out, obtain new code
+
 
         return view('mystats');
 
