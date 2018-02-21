@@ -15,6 +15,9 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::post('/login', 'HomeController@index')->name('login');
+Route::get('/register', 'HomeController@index');
+
 Route::get('/login/spotify', 'SpotifyAuth@spotifyLogin');
 Route::get('/denied', 'SpotifyAuth@denied');
 Route::get('/mystats', 'SpotifyAuth@retrieveTokens');
