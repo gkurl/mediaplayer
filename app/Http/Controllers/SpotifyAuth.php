@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 
 use App\Tokens;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use SpotifyWebAPI;
+use GuzzleHttp\Client;
 
 
 class SpotifyAuth extends Controller
@@ -14,32 +16,41 @@ class SpotifyAuth extends Controller
     public function spotifyLogin()
     {
 
+        if(!Auth::check()) {
 
-        //set required params for spotify api from env file.
+            redirect('login/spotify');
+        }
 
-        $client_id = env('SPOTIFY_KEY');
-        $client_secret = env('SPOTIFY_SECRET');
-        $redirect_uri = env('SPOTIFY_REDIRECT_URI');
 
-        $session = new SpotifyWebAPI\Session(
+            //set required params for spotify api from env file.
 
-            $client_id,
-            $client_secret,
-            $redirect_uri
-        );
+            $client_id = env('SPOTIFY_KEY');
+            $client_secret = env('SPOTIFY_SECRET');
+            $redirect_uri = env('SPOTIFY_REDIRECT_URI');
 
-        //Define scopes for access
+            $session = new SpotifyWebAPI\Session(
 
-        $options = ['scope' => ['user-top-read', 'playlist-read-private', 'user-read-private']];
+                $client_id,
+                $client_secret,
+                $redirect_uri
+            );
 
-        //Redirect to authorisation page.
+            //Define scopes for access
 
-        return redirect($session->getAuthorizeUrl($options));
+            $options = ['scope' => ['user-top-read', 'playlist-read-private', 'user-read-private']];
+
+            //Redirect to authorisation page.
+
+            return redirect($session->getAuthorizeUrl($options));
+
+
+
 
 
     }
 
-    public function retrieveTokens(){
+    public function retrieveTokens()
+    {
 
         $session = new SpotifyWebAPI\Session(
 
@@ -50,34 +61,43 @@ class SpotifyAuth extends Controller
 
         //Request access token from Spotify
 
+
         $session->requestAccessToken($_GET['code']);
 
         $accessToken = $session->getAccessToken();
         $refreshToken = $session->getRefreshToken();
 
-        //Request refresh token from Spotify
-
-        $session->refreshAccessToken($refreshToken);
-
         //Store access and refresh tokens in DB
 
-        $token = new Tokens;
-        $token->access_token = $accessToken;
-        $token->refresh_token = $refreshToken;
-        $token->save();
-
-        //Check for access token time out and if timed out, obtain new code
 
 
-        return view('mystats');
 
+
+        return view('mystats')->with(session()->all());
     }
 
+   /* public function apiWrapper(){
 
-    public function denied(){
+        $api = new SpotifyWebAPI\SpotifyWebAPI();
 
-        return view('denied');
+        //Fetch saved access tokens
+
+        $accessToken = \App\Tokens::where('access_token')->first();
+
+
+        $api->setAccessToken($accessToken);
+
+
+    }*/
+
+
+
+
+        public function denied()
+        {
+
+            return view('denied');
+        }
+
+
     }
-
-
-}

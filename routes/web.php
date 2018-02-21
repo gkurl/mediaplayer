@@ -12,9 +12,13 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/login/spotify', 'SpotifyAuth@spotifyLogin');
 Route::get('/denied', 'SpotifyAuth@denied');
 Route::get('/mystats', 'SpotifyAuth@retrieveTokens');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
