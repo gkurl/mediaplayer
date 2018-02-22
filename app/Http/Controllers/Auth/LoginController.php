@@ -30,7 +30,7 @@ class LoginController extends Controller
     protected function redirectTo(Request $request)
     {
 
-        $userCheck = \App\User::where('email', $request->get('email'))->first();
+        $userCheck = \App\User::select('email')->where('email', $request->get('email'));
 
         if (!Auth::check() && !$userCheck){
 
@@ -39,7 +39,10 @@ class LoginController extends Controller
         } elseif (Auth::check() && $userCheck){
 
             return redirect('/mystats');
+
         }
+
+        return "oh no something went wrong";
 
 
     }

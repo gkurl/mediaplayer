@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Tokens;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use SpotifyWebAPI;
@@ -15,16 +16,9 @@ class SpotifyAuth extends Controller
 
     public function spotifyLogin(Request $request){
 
-        $userCheck = \App\User::where('email', $request->get('email'))->first();
+        $userCheck = \App\User::select('refresh_token')->where('email', $request->get('email'))->first();
 
         if (!Auth::check() && !$userCheck){
-
-            redirect('/register');
-
-        } elseif (Auth::check() && $userCheck){
-
-            redirect('/login/spotify');
-        }
 
             //set required params for spotify api from env file.
 
@@ -32,12 +26,15 @@ class SpotifyAuth extends Controller
             $client_secret = env('SPOTIFY_SECRET');
             $redirect_uri = env('SPOTIFY_REDIRECT_URI');
 
+            //instantiate session for Spotify web API
+
             $session = new SpotifyWebAPI\Session(
 
                 $client_id,
                 $client_secret,
                 $redirect_uri
             );
+
 
             //Define scopes for access
 
@@ -47,40 +44,58 @@ class SpotifyAuth extends Controller
 
             return redirect($session->getAuthorizeUrl($options));
 
+        } elseif (Auth::check() && $userCheck) {
+
+            $existingRefreshToken = \App\User::select('refresh_token')->where('email', $request->get('email'))->first();
+
+            $client_id = env('SPOTIFY_KEY');
+            $client_secret = env('SPOTIFY_SECRET');
+            $redirect_uri = env('SPOTIFY_REDIRECT_URI');
+
+            //instantiate session for Spotify web API
+
+            $session = new SpotifyWebAPI\Session(
+
+                $client_id,
+                $client_secret,
+                $redirect_uri
+            );
+
+            \App\User::select('access_token')->where('refresh_token');
+            $session->refreshAccessToken($existingRefreshToken);
+
+
+        }
+
+        return view('mystats');
+
 
     }
 
     public function retrieveTokens(Request $request)
     {
-        $userCheck = \App\User::where('email', $request->get('email'))->first();
-/*        $accessTokenCheck = \App\User::where('access_token', $request->get('email'))->first();*/
-        $refreshTokenCheck = \App\User::where('refresh_token', $request->get('email'))->first();
+
+        $refreshToken = \App\User::select('refresh_token')->where('email', $request->get('email'))->first();
 
 
+        if(!Auth::check() && !$refreshToken){
 
-        if(!Auth::check() && !$refreshTokenCheck){
             redirect('/login/spotify');
+
+        } elseif (Auth::check() && $refreshToken){
+
+            $session = new SpotifyWebAPI\Session(
+
+                $client_id = env('SPOTIFY_KEY'),
+                $client_secret = env('SPOTIFY_SECRET'),
+                $redirect_url = env('SPOTIFY_REDIRECT_URI')
+            );
+
+
+            $newAccessToken = $session->refreshAccessToken($refreshToken);
+
+            \App\User::where('refresh_token', $refreshToken)->update(['refresh_token' => $newAccessToken]);
         }
-
-        $session = new SpotifyWebAPI\Session(
-
-            $client_id = env('SPOTIFY_KEY'),
-            $client_secret = env('SPOTIFY_SECRET'),
-            $redirect_url = env('SPOTIFY_REDIRECT_URI')
-        );
-
-        //Request access token from Spotify
-
-
-        $session->requestAccessToken($_GET['code']);
-
-        $accessToken = $session->getAccessToken();
-        $refreshToken = $session->getRefreshToken();
-
-        //Store access and refresh tokens in DB
-
-
-
 
 
         return view('mystats')->with(session()->all());

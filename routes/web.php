@@ -12,8 +12,8 @@
 */
 
 
-Route::get('/login', 'Auth\LoginController@redirectTo')->name('login');
-Route::get('/register', 'HomeController@index');
+Route::post('/login{request?}', 'Auth\LoginController@redirectTo')->name('login');
+Route::post('/register{request?}', 'Auth\RegisterController@redirectTo');
 
 Route::get('/login/spotify', 'SpotifyAuth@spotifyLogin');
 Route::get('/denied', 'SpotifyAuth@denied');
@@ -21,7 +21,7 @@ Route::get('/mystats', 'SpotifyAuth@retrieveTokens');
 
 Auth::routes();
 
-Route::get('/', 'Auth\LoginController@redirectTo');
+Route::get('/', 'HomeController@index');
 
 Auth::routes();
 

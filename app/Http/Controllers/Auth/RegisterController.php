@@ -28,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected function redirectTo(Request $request)
+    protected function redirectTo()
     {
         return redirect('/login');
 
