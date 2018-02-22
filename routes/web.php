@@ -12,7 +12,7 @@
 */
 
 
-Route::post('/login', 'HomeController@index');
+Route::get('/login', 'Auth\LoginController@redirectTo')->name('login');
 Route::get('/register', 'HomeController@index');
 
 Route::get('/login/spotify', 'SpotifyAuth@spotifyLogin');
@@ -21,11 +21,11 @@ Route::get('/mystats', 'SpotifyAuth@retrieveTokens');
 
 Auth::routes();
 
-Route::get('/', function (){return view('auth.login');});
+Route::get('/', 'Auth\LoginController@redirectTo');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+/*Route::get('/home', 'HomeController@index')->name('home');*/
 
 Auth::routes();
 

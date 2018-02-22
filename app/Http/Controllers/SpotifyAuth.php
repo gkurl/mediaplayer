@@ -13,7 +13,18 @@ use GuzzleHttp\Client;
 class SpotifyAuth extends Controller
 {
 
-    public function spotifyLogin(){
+    public function spotifyLogin(Request $request){
+
+        $userCheck = \App\User::where('email', $request->get('email'))->first();
+
+        if (!Auth::check() && !$userCheck){
+
+            redirect('/register');
+
+        } elseif (Auth::check() && $userCheck){
+
+            redirect('/login/spotify');
+        }
 
             //set required params for spotify api from env file.
 
@@ -39,11 +50,16 @@ class SpotifyAuth extends Controller
 
     }
 
-    public function retrieveTokens()
+    public function retrieveTokens(Request $request)
     {
+        $userCheck = \App\User::where('email', $request->get('email'))->first();
+/*        $accessTokenCheck = \App\User::where('access_token', $request->get('email'))->first();*/
+        $refreshTokenCheck = \App\User::where('refresh_token', $request->get('email'))->first();
 
-        if(!Auth::check()){
-            redirect('register');
+
+
+        if(!Auth::check() && !$refreshTokenCheck){
+            redirect('/login/spotify');
         }
 
         $session = new SpotifyWebAPI\Session(
