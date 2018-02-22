@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -22,21 +21,8 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-
-        $userCheck = \App\User::where('email', $request->get('email'));
-
-        if (!Auth::check()) {
-
-            redirect('/register');
-
-        } elseif(Auth::check() && $userCheck)
-
-            redirect('login/spotify');
-
+        return view('home');
     }
-
-
-
 }
