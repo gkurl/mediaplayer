@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
@@ -22,14 +24,11 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (Auth::check()) {
 
-            return redirect('/mystats');
+        $tokenCheck = \App\User::where('email', $request->post('email'));
 
-        }
-
-        return view('auth.login');
+        return view('mystats');
     }
 }

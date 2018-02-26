@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Auth;
 */
 
 
-Route::post('/login', 'Auth\LoginController@redirect');
-Route::get('/register', 'Auth\RegisterController@redirect');
+Route::post('/login', 'HomeController@index')->name('login');
+Route::get('/register', 'Auth\RegisterController@redirect')->name('register');
 
 Route::get('/login/spotify', 'SpotifyAuth@spotifyLogin');
 Route::get('/denied', 'SpotifyAuth@denied');
-Route::get('/mystats', 'SpotifyAuth@retrieveTokens')->middleware('auth');
+Route::get('/mystats', 'SpotifyAuth@retrieveTokens');
 
 Auth::routes();
 
@@ -27,8 +27,3 @@ Route::get('/', 'HomeController@index');
 
 Auth::routes();
 
-/*Route::get('/home', 'HomeController@index')->name('home');*/
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

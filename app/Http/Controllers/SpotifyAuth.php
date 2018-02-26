@@ -7,6 +7,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use SpotifyWebAPI;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 
 
@@ -73,16 +75,17 @@ class SpotifyAuth extends Controller
         }
 
     public function retrieveTokens(Request $request)
-    {
 
+    {
         $refreshToken = \App\User::select('refresh_token')->where('email', $request->get('email'))->first();
 
 
-        if(!Auth::check() && !isset($refreshToken)){
+        if(!$refreshToken) {
 
             redirect('/login/spotify');
+        }}
 
-        } elseif (Auth::check() && $refreshToken){
+     /*   } elseif (isset($refreshToken)){
 
             $session = new SpotifyWebAPI\Session(
 
@@ -98,8 +101,8 @@ class SpotifyAuth extends Controller
         }
 
 
-        return view('mystats')->with(session()->all());
-    }
+        return view('mystats');*/
+
 
    /* public function apiWrapper(){
 

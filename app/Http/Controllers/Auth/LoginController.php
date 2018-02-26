@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
+
+
+
 
 class LoginController extends Controller
 {
@@ -26,24 +28,11 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected function redirect(Request $request)
+    protected function redirectTo()
     {
 
-        $userCheck = \App\User::select('refresh_token')->where('email', $request->post('email'))->first();
-
-        if (!$userCheck){
-
-            return redirect('/login/spotify');
-
-        } elseif ($userCheck){
-
-            return redirect('/mystats');
-
-        }
-
-        return "This is crap";
-
-
+/*        $userCheck = \App\User::select('refresh_token')->where($request->post('email'), 'email')->first();*/
+        return view('home');
     }
 
     /**
@@ -55,4 +44,6 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+
 }
