@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,12 +14,12 @@
 */
 
 
-Route::post('/login{request?}', 'Auth\LoginController@redirectTo')->name('login');
-Route::post('/register{request?}', 'Auth\RegisterController@redirectTo');
+Route::post('/login', 'Auth\LoginController@redirect');
+Route::get('/register', 'Auth\RegisterController@redirect');
 
 Route::get('/login/spotify', 'SpotifyAuth@spotifyLogin');
 Route::get('/denied', 'SpotifyAuth@denied');
-Route::get('/mystats', 'SpotifyAuth@retrieveTokens');
+Route::get('/mystats', 'SpotifyAuth@retrieveTokens')->middleware('auth');
 
 Auth::routes();
 

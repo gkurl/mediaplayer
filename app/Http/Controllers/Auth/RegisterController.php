@@ -28,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected function redirectTo()
+    protected function redirect()
     {
         return redirect('/login');
 

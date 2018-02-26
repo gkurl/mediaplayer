@@ -3,22 +3,19 @@
 namespace App\Http\Controllers;
 
 
-use App\Tokens;
-use App\User;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use SpotifyWebAPI;
-use GuzzleHttp\Client;
+
 
 
 class SpotifyAuth extends Controller
 {
 
-    public function spotifyLogin(Request $request){
+    public function spotifyLogin(){
 
-        $userCheck = \App\User::select('refresh_token')->where('email', $request->get('email'))->first();
-
-        if (!Auth::check() && !$userCheck){
+        if(Auth::check()){
 
             //set required params for spotify api from env file.
 
@@ -44,9 +41,15 @@ class SpotifyAuth extends Controller
 
             return redirect($session->getAuthorizeUrl($options));
 
-        } elseif (Auth::check() && $userCheck) {
+        }
 
-            $existingRefreshToken = \App\User::select('refresh_token')->where('email', $request->get('email'))->first();
+        return view('auth.login');
+
+
+
+
+
+        /*    $existingRefreshToken = \App\User::select('refresh_token')->where('email', $request->get('email'))->first();
 
             $client_id = env('SPOTIFY_KEY');
             $client_secret = env('SPOTIFY_SECRET');
@@ -64,13 +67,10 @@ class SpotifyAuth extends Controller
             \App\User::select('access_token')->where('refresh_token');
             $session->refreshAccessToken($existingRefreshToken);
 
+            return view('mystats');*/
+
 
         }
-
-        return view('mystats');
-
-
-    }
 
     public function retrieveTokens(Request $request)
     {
@@ -78,7 +78,7 @@ class SpotifyAuth extends Controller
         $refreshToken = \App\User::select('refresh_token')->where('email', $request->get('email'))->first();
 
 
-        if(!Auth::check() && !$refreshToken){
+        if(!Auth::check() && !isset($refreshToken)){
 
             redirect('/login/spotify');
 

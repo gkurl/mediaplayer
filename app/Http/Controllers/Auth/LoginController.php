@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -27,22 +26,22 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected function redirectTo(Request $request)
+    protected function redirect(Request $request)
     {
 
-        $userCheck = \App\User::select('email')->where('email', $request->get('email'));
+        $userCheck = \App\User::select('refresh_token')->where('email', $request->post('email'))->first();
 
-        if (!Auth::check() && !$userCheck){
+        if (!$userCheck){
 
-            return redirect('/register');
+            return redirect('/login/spotify');
 
-        } elseif (Auth::check() && $userCheck){
+        } elseif ($userCheck){
 
             return redirect('/mystats');
 
         }
 
-        return "oh no something went wrong";
+        return "This is crap";
 
 
     }

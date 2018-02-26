@@ -24,10 +24,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('/home');
+        if (Auth::check()) {
+
+            return redirect('/mystats');
 
         }
 
-
-
+        return view('auth.login');
+    }
 }
