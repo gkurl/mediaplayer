@@ -27,16 +27,16 @@ class HomeController extends Controller
     public function index(Request $request)
     {
 
-        $tokenCheck = \App\User::where('email', $request->post('email'));
+        $tokenCheck = \App\User::select('refresh_token')->where('email', $request->post('email'));
 
-        if (isset($tokenCheck)){
+        if (empty($tokenCheck)){
+
+           return view('welcome');
+
+        } else {
 
             return view('mystats');
-
-
         }
-
-        return dd($tokenCheck);
 
 
     }
