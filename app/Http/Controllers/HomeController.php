@@ -29,6 +29,15 @@ class HomeController extends Controller
 
         $tokenCheck = \App\User::where('email', $request->post('email'));
 
-        return view('mystats');
+        if (isset($tokenCheck)){
+
+            return view('mystats');
+
+
+        }
+
+        return dd($tokenCheck);
+
+
     }
 }
