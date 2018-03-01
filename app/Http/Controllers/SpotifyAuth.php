@@ -17,10 +17,6 @@ class SpotifyAuth extends Controller
 
     public function spotifyLogin(){
 
-
-
-        if(Auth::check()){
-
             //set required params for spotify api from env file.
 
             $client_id = env('SPOTIFY_KEY');
@@ -47,7 +43,6 @@ class SpotifyAuth extends Controller
 
         }
 
-        return view('mystats');
 
 
 
@@ -74,14 +69,14 @@ class SpotifyAuth extends Controller
             return view('mystats');*/
 
 
-        }
+
 
     public function retrieveTokens(Request $request)
     {
-        $refreshToken = \App\User::select('refresh_token')->where('email', $request->get('email'));
+        $refreshToken = \App\User::pluck('refresh_token')->where('email', $request->post('email'));
 
 
-        if(!$refreshToken) {
+        if(empty($refreshToken->refresh_token)) {
 
             redirect('/login/spotify');
         }}

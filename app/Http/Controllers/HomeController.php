@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -27,17 +28,22 @@ class HomeController extends Controller
     public function index(Request $request)
     {
 
-        $tokenCheck = \App\User::select('refresh_token')->where('email', $request->post('email'));
+        $email = DB::table('users')->pluck('refresh_token')->where('email', $request->post('email'));
 
-        if (empty($tokenCheck)){
+        if (empty($email->refresh_token)){
+           return redirect('login/spotify');
+        }
 
-           return view('welcome');
+        return redirect('/mystats');
 
-        } else {
-
-            return view('mystats');
         }
 
 
-    }
+
+
+
+
+
+
+
 }
