@@ -34,8 +34,6 @@ class HomeController extends Controller
            return redirect('login/spotify');
         }
 
-        return redirect('/mystats');
-
         }
 
 
