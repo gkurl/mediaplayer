@@ -77,7 +77,7 @@ class SpotifyAuth extends Controller
 
         //Store access and refresh tokens in DB
 
-        \App\User::where('email', $request->post('email')->update(['access_token' => $accessToken, 'refresh_token' => $refreshToken]));
+        \App\User::where('email', $request->post('email')->insert(['access_token' => $accessToken, 'refresh_token' => $refreshToken]));
 
         //Do some checks to see if token is there or not to determine if already existing user
 
