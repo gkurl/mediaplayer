@@ -31,7 +31,7 @@ class HomeController extends Controller
         $email = DB::table('users')->pluck('refresh_token')->where('email', $request->post('email'));
 
         if (empty($email->refresh_token)){
-           return redirect('login/spotify');
+           return redirect('login/spotify')->withInput($request->post('email'));
         }
 
         }

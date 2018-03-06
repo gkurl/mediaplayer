@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use SpotifyWebAPI;
@@ -77,7 +78,10 @@ class SpotifyAuth extends Controller
 
         //Store access and refresh tokens in DB
 
-        \App\User::where('email', $request->post('email')->insert(['access_token' => $accessToken, 'refresh_token' => $refreshToken]));
+
+
+        \App\User::where('email', $request->post('email')->insert($accessToken, 'access_token' ));
+        \App\User::where('email', $request->post('email')->insert($refreshToken, 'refresh_token' ));
 
         //Do some checks to see if token is there or not to determine if already existing user
 
