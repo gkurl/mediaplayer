@@ -28,10 +28,17 @@ class HomeController extends Controller
     public function index(Request $request)
     {
 
-        $email = DB::table('users')->pluck('refresh_token')->where('email', $request->post('email'));
+       $refreshToken = \App\User::pluck('refresh_token')->where('email', $request->post('email'));
+        $email = \App\User::pluck('email')->where('email', $request->post('email'));
 
-        if (empty($email->refresh_token)){
-           return redirect('login/spotify')->withInput($request->post('email'));
+
+
+        if (empty($refreshToken->refresh_token)){
+            $request->session()->put('email', $email);
+           return redirect('login/spotify');
+        } else{
+            $request->session()->put('email', $email);
+            return redirect('/mystats')->with('email', $email);
         }
 
         }

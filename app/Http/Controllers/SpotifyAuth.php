@@ -65,8 +65,11 @@ class SpotifyAuth extends Controller
         //Instantiate new API interface
 
         $api = new SpotifyWebAPI\SpotifyWebAPI();
+        /*$email = $request->session()->get('email')*/;
 
-        $refreshToken = \App\User::pluck('refresh_token')->where('email', $request->post('email'));
+
+        $refreshToken = \App\User::pluck('refresh_token')->where('email', $request->session()->get('email'));
+
 
         if(empty($refreshToken->refresh_token))
 
@@ -78,40 +81,39 @@ class SpotifyAuth extends Controller
 
         //Store access and refresh tokens in DB
 
+        $insert = ['access_token' => $accessToken, 'refresh_token' => $refreshToken];
 
+        \App\User::where('email', $request->session()->get('email'))->insert($insert)->first();
 
-        \App\User::where('email', $request->post('email')->insert($accessToken, 'access_token' ));
-        \App\User::where('email', $request->post('email')->insert($refreshToken, 'refresh_token' ));
 
         //Do some checks to see if token is there or not to determine if already existing user
 
+         if($refreshToken){
 
-         if($refreshToken->refresh_token){
-
-            $accessToken = \App\User::pluck('access_token')->where('email', $request->post('email'));
+            $accessToken = \App\User::pluck('access_token')->where('email', $request->session()->get('email'))->first();
 
             //Check for timeout if logging in after long time, if so, get new access token
 
             try {
                 $tryUrl->get("https://api.spotify.com/v1/me/top/",  ['headers' => [
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $accessToken->access_token
+                    'Authorization' => 'Bearer ' . $accessToken
                 ],
             ]);
 
             } catch (\Exception $e){
 
-                $session->refreshAccessToken($refreshToken->refresh_token);
+                $session->refreshAccessToken($refreshToken);
 
                 $accessToken = $session->getAccessToken();
 
                 //Update access token in DB
 
-                \App\User::where('email', $request->post('email')->update('access_token', $accessToken));
+                \App\User::where('email', $request->session()->get('email'))->update(['access_token' => $accessToken]);
 
             }
 
-            $api->setAccessToken($accessToken->access_token);
+            $api->setAccessToken($accessToken);
 
         }
 
