@@ -73,7 +73,7 @@ class SpotifyAuth extends Controller
 
         if(empty($refreshToken->refresh_token))
 
-        // Request a access token using the code from Spotify
+        // Request an access token using the code from Spotify
         $session->requestAccessToken($_GET['code']);
 
         $accessToken = $session->getAccessToken();
