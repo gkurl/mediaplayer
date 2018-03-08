@@ -68,36 +68,37 @@ class SpotifyAuth extends Controller
         /*$email = $request->session()->get('email')*/;
 
 
-        $refreshToken = \App\User::pluck('refresh_token')->where('email', $request->session()->get('email'));
+        $refreshTokenQuery = \App\User::where('email', $request->session()->get('email'))->pluck('refresh_token')->first();
 
 
-        if(empty($refreshToken->refresh_token))
+        if(empty($refreshTokenQuery)) {
 
-        // Request an access token using the code from Spotify
-        $session->requestAccessToken($_GET['code']);
+            // Request an access token using the code from Spotify
+            $session->requestAccessToken($_GET['code']);
 
-        $accessToken = $session->getAccessToken();
-        $refreshToken = $session->getRefreshToken();
+            $accessToken = $session->getAccessToken();
+            $refreshToken = $session->getRefreshToken();
 
-        //Store access and refresh tokens in DB
+            //Store access and refresh tokens in DB
 
-        $insert = ['access_token' => $accessToken, 'refresh_token' => $refreshToken];
+            $insert = ['access_token' => $accessToken, 'refresh_token' => $refreshToken];
 
-        \App\User::where('email', $request->session()->get('email'))->insert($insert)->first();
+            \App\User::where('email', $request->session()->get('email'))->update($insert);
+        }
 
 
         //Do some checks to see if token is there or not to determine if already existing user
 
-         if($refreshToken){
+         if(isset($refreshTokenQuery->refresh_token)){
 
-            $accessToken = \App\User::pluck('access_token')->where('email', $request->session()->get('email'))->first();
+            $accessTokenQuery = \App\User::where('email', $request->session()->get('email'))->pluck('access_token')->first();
 
             //Check for timeout if logging in after long time, if so, get new access token
 
             try {
                 $tryUrl->get("https://api.spotify.com/v1/me/top/",  ['headers' => [
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $accessToken
+                    'Authorization' => 'Bearer ' . $accessTokenQuery
                 ],
             ]);
 
