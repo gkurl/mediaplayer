@@ -45,7 +45,7 @@ class SpotifyAuth extends Controller
         }
 
 
-    public function retrieveTokens(\GuzzleHttp\Client $tryUrl, Request $request)
+    public function retrieveTokens(Request $request)
     {
         //Start Spotify API session
 
@@ -76,9 +76,8 @@ class SpotifyAuth extends Controller
 
             //Store access and refresh tokens in DB
 
-            $insert = ['access_token' => $accessToken, 'refresh_token' => $refreshToken];
 
-            \App\User::where('email', $request->session()->get('email'))->update($insert);
+            \App\User::where('email', $request->session()->get('email'))->update(['access_token' => $accessToken, 'refresh_token' => $refreshToken]);
         }
 
         //Instantiate API

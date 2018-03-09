@@ -22,8 +22,12 @@
 
 <?php
 
-/*$tracks = $api->getMyTop('tracks') = $getMyTop->items;*/
+$tracks = $api->getMyTop('tracks')->items;
+shuffle($tracks);
+foreach ($tracks as $track){
 
+   echo "<li>" .$track->name . "</li>";
+}
 ?>
 @endsection
 
