@@ -10,7 +10,23 @@
 </head>
 <body>
 
-<h1>Hello</h1>
+<h1>Hello, <?php
+        $name = get_object_vars($api->me());
+        print_r($name['display_name']);
+        ?></h1></br></br>
+
+<h2>These are your top tracks:</h2></br>
+
+<?php
+
+$tracks = get_object_vars($api->getMyTop('tracks'));
+implode(" ", $tracks);
+?>
+
+
+
+
+
 
 
 </body>
