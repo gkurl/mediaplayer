@@ -15,12 +15,13 @@
         print_r($name['display_name']);
         ?></h1></br></br>
 
-<h2>These are your top tracks:</h2></br>
+<div class="container"><h2>These are your top tracks:</h2></br>
+</div>
 
 <?php
 
-$tracks = get_object_vars($api->getMyTop('tracks'));
-implode(" ", $tracks);
+/*$tracks = $api->getMyTop('tracks') = $getMyTop->items;*/
+
 ?>
 
 
