@@ -1,5 +1,5 @@
-<!doctype html>
 @extends('layouts.app')
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,21 +9,23 @@
     <title>My Stats</title>
 </head>
 <body>
+@section('content')
 
 <h1>Hello, <?php
         $name = get_object_vars($api->me());
         print_r($name['display_name']);
         ?></h1></br></br>
 
-<div class="container"><h2>These are your top tracks:</h2></br>
-</div>
+<h2>These are your top tracks:</h2></br>
+
+
 
 <?php
 
 /*$tracks = $api->getMyTop('tracks') = $getMyTop->items;*/
 
 ?>
-
+@endsection
 
 
 
