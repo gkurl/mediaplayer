@@ -105,7 +105,7 @@ class SpotifyAuth extends Controller
             $api->setAccessToken($accessToken);
         }
 
-        return view('mystats',['api' => $api, 'access_token' => $accessToken]);
+        return view('mystats', ['api' => $api, 'access_token' => $accessToken]);
 
 
 

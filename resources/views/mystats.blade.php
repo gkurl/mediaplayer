@@ -16,14 +16,12 @@
         ?>
         </h1></br>
 
-<div><h2>These are your top tracks:</h2></br>
-
+<div class="top-tracks"><h2>These are your top tracks:</h2></br>
 <?php
 $tracks = $api->getMyTop('tracks')->items;
 shuffle($tracks);
 foreach ($tracks as $track){
-
-   echo "<li style=\"list-style-type:none; padding-left:15px;\">" .$track->name . "</li>";
+   echo "<li id=\"checked2\" style=\"list-style-type:none; padding-left:15px;\" ><input id=\"checked\" type=\"checkbox\"  name=\"toptrackschecked\">" .$track->name . "</li></input>";
 }
 ?>
 </div>
@@ -37,4 +35,17 @@ foreach ($tracks as $track){
 
 
 </body>
+<script>
+   var isChecked = document.getElementById("checked").addEventListener("change", function(e){
+// CHECK IF CHECKED
+
+        if(isChecked){
+            alert("it's checked");//checked
+            //execute code here
+        }else { //unchecked
+            //execute code here
+            alert("it's not checked");
+        }
+    });
+    </script>
 </html>
