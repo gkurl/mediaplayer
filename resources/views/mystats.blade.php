@@ -21,7 +21,7 @@
 $tracks = $api->getMyTop('tracks')->items;
 shuffle($tracks);
 foreach ($tracks as $track){
-   echo "<li id=\"checked2\" style=\"list-style-type:none; padding-left:15px;\" ><input id=\"checked\" type=\"checkbox\"  name=\"toptrackschecked\">" .$track->name . "</li></input>";
+   echo "<li style=\"list-style-type:none; padding-left:15px;\" ><input type=\"checkbox\" id=\"checked\" onclick=\"check()\">" .$track->name . "</li></input>";
 }
 ?>
 </div>
@@ -36,16 +36,16 @@ foreach ($tracks as $track){
 
 </body>
 <script>
-   var isChecked = document.getElementById("checked").addEventListener("change", function(e){
+    function check() {
+        var isChecked = document.getElementById("checked").checked;
 // CHECK IF CHECKED
-
-        if(isChecked){
+        if (isChecked) {
             alert("it's checked");//checked
             //execute code here
-        }else { //unchecked
+        } else { //unchecked
             //execute code here
             alert("it's not checked");
         }
-    });
+    }
     </script>
 </html>
