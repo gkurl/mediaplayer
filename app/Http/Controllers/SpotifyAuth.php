@@ -86,9 +86,9 @@ class SpotifyAuth extends Controller
 
     // Fetch the saved access token from DB.
 
-       $accessTokenDB = \App\User::where('email', $request->session()->get('email'))->pluck('access_token')->first();
+       $accessToken = \App\User::where('email', $request->session()->get('email'))->pluck('access_token')->first();
 
-        $api->setAccessToken($accessTokenDB);
+        $api->setAccessToken($accessToken);
 
         if (E_ERROR){
 
@@ -99,13 +99,13 @@ class SpotifyAuth extends Controller
 
             $session->refreshAccessToken($refreshTokenDB);
 
-            $accessTokenNew = $session->getAccessToken();
+            $accessToken = $session->getAccessToken();
 
 // Set our new access token on the API wrapper and continue to use the API as usual
-            $api->setAccessToken($accessTokenNew);
+            $api->setAccessToken($accessToken);
         }
 
-        return view('mystats',['api' => $api]);
+        return view('mystats',['api' => $api, 'access_token' => $accessToken]);
 
 
 

@@ -10,25 +10,25 @@
 </head>
 <body>
 @section('content')
+        <h1>Hello,
+        <?php $name = $api->me()->display_name;
+        echo $name;
+        ?>
+        </h1></br>
 
-<h1>Hello, <?php
-        $name = get_object_vars($api->me());
-        print_r($name['display_name']);
-        ?></h1></br></br>
-
-<h2>These are your top tracks:</h2></br>
-
-
+<div><h2>These are your top tracks:</h2></br>
 
 <?php
-
 $tracks = $api->getMyTop('tracks')->items;
 shuffle($tracks);
 foreach ($tracks as $track){
 
-   echo "<li>" .$track->name . "</li>";
+   echo "<li style=\"list-style-type:none; padding-left:15px;\">" .$track->name . "</li>";
 }
 ?>
+</div>
+
+    <h2><div class="spotify-button recommendations" id="getrecommendations" style="">Get Recommendations</div></h2>
 @endsection
 
 
