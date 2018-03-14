@@ -112,7 +112,7 @@ class SpotifyAuth extends Controller
 
     }
 
-
+    public function getRecommends(){}
 
 
     }

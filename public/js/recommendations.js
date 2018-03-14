@@ -1,25 +1,34 @@
 
-/*
-    var checkedvalue = document.querySelector('#checked:checked').value;
-*/
+    var checkboxes;
+    var vals;
+
     function check() {
-        var checkedValue = [];
-        var boxes = document.querySelector('#checked:checked').value;
-        for (var i = 0; i < boxes.length; i++) {
-            var box = boxes[i];
-            if (box.type == "checkbox" && box.checked) {
-                checkedValue[checkedValue.length] = box.value;
+        var checkboxes = document.querySelectorAll('.checkbox-class:checked');
+        var vals = [];
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                vals.push(checkboxes[i].value);
+            } if(vals.length > 5){
+                checkboxes[i].checked = false;
+                vals.pop();
+                if(checkboxes[i].checked === false){
+                    checkboxes[i].disabled = true;
+                }
+
             }
-            console.log(checkedValue);
+            console.log(vals);
+
         }
-    }
+}
 
 
+    function makeRequest(access_token){
+        $.ajax({
+            method: "POST",
+            url: "/mystats/recommends",
+            data: {
+                seed_artists: vals
+            }
 
-/*    $.ajax({
-        method: "POST",
-        url: "/recommends",
-        data: {trackid: checkedvalue}
-    })
-    }*/
+    })}
 

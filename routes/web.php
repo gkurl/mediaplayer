@@ -20,6 +20,7 @@ Route::get('/register', 'Auth\RegisterController@redirect')->name('register');
 Route::get('/login/spotify', 'SpotifyAuth@spotifyLogin');
 Route::get('/denied', 'SpotifyAuth@denied');
 Route::get('/mystats', 'SpotifyAuth@retrieveTokens');
+Route::post('/mystats/recommends', 'SpotifyAuth@getRecommends');
 
 Auth::routes();
 
