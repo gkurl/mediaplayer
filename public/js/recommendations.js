@@ -52,7 +52,9 @@
 
         function getCheckedBoxes(checkbox) {
             var checkboxes = document.getElementsByName('checkbox');
+            var unCheckedBoxes = document.querySelectorAll('.checkbox-class:checked');
             var checkboxesChecked = [];
+
             // loop over them all
             for (var i=0; i<checkboxes.length; i++) {
                 // And stick the value of checked ones onto an array

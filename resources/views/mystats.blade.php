@@ -45,7 +45,7 @@ foreach ($tracks as $track){
 
 </br> <h4>Start building your custom lists from the suggestions here</h4>
 
-    <h2><<div class="spotify-button recommendations" id="getrecommendations" onclick="" style="display: none;">Get Recommendations</div></h2>
+    <h2><div class="spotify-button recommendations" id="getrecommendations" onclick="" style="display: none;">Get Recommendations</div></h2>
 @endsection
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="{{asset('js/recommendations.js')}}"></script>
