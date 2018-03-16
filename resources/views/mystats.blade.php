@@ -14,7 +14,7 @@
 @section('content')
     <!-- Main heading area !-->
         <h1>Hello,
-        <?php $name = $api->me()->display_name;
+        <?php $name = $api->me()->display_name . "!";
         echo $name;
         ?>
         </h1></br>
@@ -24,25 +24,28 @@
 
     <!-- Top track section !-->
 
-    <div class="top-tracks"><h2>These are your top tracks:</h2></br>
-    <div id="checkboxes">
+    <div class="top-tracks"><h2>Your top tracks are just below</h2></br>
+        <h4><strong>Select up to five tracks</strong></h4></br>
+    <div id="checkbox">
+        <ul id="checkboxes">
 <?php
 $tracks = $api->getMyTop('tracks')->items;
 shuffle($tracks);
 foreach ($tracks as $track){
 
-    echo "<li style=\"list-style-type:none; padding-left:15px;\" ><input class=\"checkbox-class\" type=\"checkbox\" name=\"checkbox\" value=\"" . $track->id . "\" id=\"checked\" onclick=\"check()\">" .$track->name . "</input> </li>";
+    echo "<li style=\"list-style-type:none;\" ><input class=\"checkbox-class\" type=\"checkbox\" name=\"checkbox\" value=\"" . $track->id . "\" id=\"checked\" onclick=\"check()\">" .$track->name . "</input> </li>";
 
 }
 ?>
 
-
+        </ul>
     </div>
 </div>
-
     <!-- End top track section !-->
 
-    <h2><div class="spotify-button recommendations" id="getrecommendations" onclick="/*makeRequest()*/" style="display: none;">Get Recommendations</div></h2>
+</br> <h4>Start building your custom lists from the suggestions here</h4>
+
+    <h2><<div class="spotify-button recommendations" id="getrecommendations" onclick="" style="display: none;">Get Recommendations</div></h2>
 @endsection
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="{{asset('js/recommendations.js')}}"></script>
