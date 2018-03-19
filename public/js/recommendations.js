@@ -23,32 +23,32 @@
         var recommendBtn = document.getElementById('getrecommendations');
         var vals = [];
 
-       /* for (i = 0; i < checkboxes.length; i++) {
+        /* for (i = 0; i < checkboxes.length; i++) {
 
-            checkboxes[i].addEventListener('click', function () {
+             checkboxes[i].addEventListener('click', function () {
 
-                if (this.checked) {
+                 if (this.checked) {
 
-                    vals.push(this.value);
+                     vals.push(this.value);
 
-                } else {
+                 } else {
 
-                    vals.splice(vals.indexOf(this.value), 1);
-                }
+                     vals.splice(vals.indexOf(this.value), 1);
+                 }
 
-                if (vals.length >= 1) {
+                 if (vals.length >= 1) {
 
-                    recommendBtn.style.display = 'block';
+                     recommendBtn.style.display = 'block';
 
-                } else {
+                 } else {
 
-                    recommendBtn.style.display = 'none';
+                     recommendBtn.style.display = 'none';
 
-                }
-                console.log(this, vals);
+                 }
+                 console.log(this, vals);
 
-            });
-        }*/
+             });
+         }*/
 
         function getCheckedBoxes(checkbox) {
             var checkboxes = document.getElementsByName('checkbox');
@@ -56,28 +56,45 @@
             var checkboxesChecked = [];
 
             // loop over them all
-            for (var i=0; i<checkboxes.length; i++) {
+            for (var i = 0; i < checkboxes.length; i++) {
                 // And stick the value of checked ones onto an array
                 if (checkboxes[i].checked) {
                     checkboxesChecked.push(checkboxes[i].value);
-                //else remove the unselected value chosen by user using this
-                }else {
+                    //else remove the unselected value chosen by user using this
+                } else {
                     checkboxesChecked.splice(checkboxesChecked.indexOf(this.value), 0);
                 }
-                if(checkboxesChecked.length >= 1){
+                if (checkboxesChecked.length >= 1) {
                     recommendBtn.style.display = 'block';
                 } else {
                     recommendBtn.style.display = 'none';
+                }
+                if (checkboxesChecked.length > 4) {
+                    stopCheck();
                 }
             }
             // Return the array if it is non-empty, or null
             return checkboxesChecked.length > 0 ? checkboxesChecked : null;
 
+            function stopCheck() {
 
+                $('.checkbox-class').change(function(){
+                    if($('input.checkbox-class').filter(':checked').length == 5)
+                        $('input.checkbox-class:not(:checked)').attr('disabled', 'disabled');
+                    else
+                        $('input.checkbox-class').removeAttr('disabled');
+                });
+
+
+            }
         }
 
+
+
 // Call as
+
         var checkedBoxes = getCheckedBoxes("mycheckboxes");
+
         console.log(checkedBoxes);
     }
 
