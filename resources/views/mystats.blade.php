@@ -26,6 +26,7 @@
 
     <div class="top-tracks"><h2>Your top tracks are just below</h2></br>
         <h4><strong>Select up to five tracks</strong></h4></br>
+
     <div id="checkbox">
         <ul id="checkboxes">
 <?php
@@ -34,7 +35,6 @@ shuffle($tracks);
 foreach ($tracks as $track){
 
     echo "<li style=\"list-style-type:none;\" ><input class=\"checkbox-class\" type=\"checkbox\" name=\"checkbox\" value=\"" . $track->id . "\" id=\"checked\" onclick=\"check()\">" .$track->name . "</input> </li>";
-
 }
 ?>
 
@@ -43,9 +43,12 @@ foreach ($tracks as $track){
 </div>
     <!-- End top track section !-->
 
-</br> <h4>Start building your custom lists from the suggestions here</h4>
+</br> <h4>Start building your custom lists from the suggestions below once selections have been made above</h4>
 
-    <h2><div class="spotify-button recommendations" id="getrecommendations" onclick="" style="display: none;">Get Recommendations</div></h2>
+    <div class="spotify-button recommendations" id="getrecommendations" style="display: none;"> <h2>Get Recommendations</h2>
+        <input type="button" value="Fetch" onclick="makeRequest(<?php $access_token ?>)">
+
+    </div>
 @endsection
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="{{asset('js/recommendations.js')}}"></script>

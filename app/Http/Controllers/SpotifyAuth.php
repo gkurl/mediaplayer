@@ -63,10 +63,10 @@ class SpotifyAuth extends Controller
         );/*$email = $request->session()->get('email')*/;
 
 
-        $refreshTokenQuery = \App\User::where('email', $request->session()->get('email'))->pluck('refresh_token')->first();
+        $refreshToken = \App\User::where('email', $request->session()->get('email'))->pluck('refresh_token')->first();
 
 
-        if (empty($refreshTokenQuery)) {
+        if (empty($refreshToken)) {
 
             // Request an access token using the code from Spotify
             $session->requestAccessToken($_GET['code']);
@@ -87,6 +87,19 @@ class SpotifyAuth extends Controller
     // Fetch the saved access token from DB.
 
        $accessToken = \App\User::where('email', $request->session()->get('email'))->pluck('access_token')->first();
+
+       if (empty($accessToken)){
+
+           $refreshToken = \App\User::where('email', $request->session()->get('email'))->pluck('refresh_token')->first();
+
+           $session->refreshAccessToken($refreshToken);
+
+           $accessToken = $session->getAccessToken();
+
+           \App\User::where('email', $request->session()->get('email'))->update(['access_token' => $accessToken]);
+
+
+       }
 
         $api->setAccessToken($accessToken);
 

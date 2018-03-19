@@ -1,5 +1,8 @@
+var checkboxes = document.getElementsByName('checkbox');
+var unCheckedBoxes = document.querySelectorAll('.checkbox-class:checked');
+var checkboxesChecked = [];
 
-    function check() {
+function check() {
 
 // jQuery way to add items and remove on check/uncheck
 
@@ -17,11 +20,10 @@
 
 // Pure JS way to add items and remove on check/uncheck
 
-        var checkboxes = document.querySelectorAll('input[name=checkbox]');
-        /*var reset = document.querySelectorAll('.list-ids');
-        reset.innerHTML = '';*/
-        var recommendBtn = document.getElementById('getrecommendations');
-        var vals = [];
+
+
+
+
 
         /* for (i = 0; i < checkboxes.length; i++) {
 
@@ -49,8 +51,10 @@
 
              });
          }*/
+        var recommendBtn = document.getElementById('getrecommendations');
 
-        function getCheckedBoxes(checkbox) {
+        function getCheckedBoxes() {
+
             var checkboxes = document.getElementsByName('checkbox');
             var unCheckedBoxes = document.querySelectorAll('.checkbox-class:checked');
             var checkboxesChecked = [];
@@ -87,6 +91,8 @@
 
 
             }
+
+
         }
 
 
@@ -95,8 +101,26 @@
 
         var checkedBoxes = getCheckedBoxes("mycheckboxes");
 
+
+
         console.log(checkedBoxes);
     }
+
+function makeRequest(access_token){
+    $.ajax({
+        type: "GET",
+        url: "https://api.spotify.com/v1/recommendations",
+        headers: {
+            'Authorization': 'Bearer ' + access_token
+        },
+        data: {
+            seed_artists: checkboxesChecked
+        },
+        success: function (response) {
+            console.log(response.headers);
+        }
+
+    })}
 
 
 
@@ -140,15 +164,7 @@
         console.log(vals, unchecked);*/
 
 
-/*}
 
-    function makeRequest(access_token){
-        $.ajax({
-            method: "POST",
-            url: "/mystats/recommends",
-            data: {
-                seed_artists: vals
-            }
 
-    })}*/
+
 
