@@ -11,6 +11,8 @@
 </head>
 <body>
 
+
+
 @section('content')
     <!-- Main heading area !-->
         <h1>Hello,
@@ -46,7 +48,8 @@ foreach ($tracks as $track){
 </br> <h4>Start building your custom lists from the suggestions below once selections have been made above</h4>
 
     <div class="spotify-button recommendations" id="getrecommendations" style="display: none;"> <h2>Get Recommendations</h2>
-        <input type="button" value="Fetch" onclick="makeRequest(<?php $access_token ?>)">
+        <script>var access_token = "<?php echo $access_token; ?>";</script>
+        <input type="button" value="Fetch" onclick="makeRequest(access_token)">
 
     </div>
 @endsection

@@ -36,7 +36,15 @@ class SpotifyAuth extends Controller
 
             //Define scopes for access
 
-            $options = ['scope' => ['user-top-read', 'playlist-read-private', 'user-read-private']];
+            $options =[
+
+                'scope' => ['user-top-read',
+                    'playlist-read-private',
+                    'user-read-private',
+                    'user-follow-read',
+                    'playlist-modify-public',
+                    'playlist-modify-private', ]
+            ];
 
             //Redirect to authorisation page.
 
@@ -107,16 +115,18 @@ class SpotifyAuth extends Controller
 
             // Fetch the refresh token from DB.
 
-            $refreshTokenDB = \App\User::where('email', $request->session()->get('email'))->pluck('refresh_token')->first();
+            $refreshToken = \App\User::where('email', $request->session()->get('email'))->pluck('refresh_token')->first();
 
 
-            $session->refreshAccessToken($refreshTokenDB);
+            $session->refreshAccessToken($refreshToken);
 
             $accessToken = $session->getAccessToken();
 
 // Set our new access token on the API wrapper and continue to use the API as usual
             $api->setAccessToken($accessToken);
         }
+        $scopes = $session->getScope();
+        $api->setAccessToken($accessToken);
 
         $accessToken = \App\User::where('email', $request->session()->get('email'))->pluck('access_token')->first();
 
