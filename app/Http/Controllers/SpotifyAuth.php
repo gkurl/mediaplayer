@@ -118,6 +118,8 @@ class SpotifyAuth extends Controller
             $api->setAccessToken($accessToken);
         }
 
+        $accessToken = \App\User::where('email', $request->session()->get('email'))->pluck('access_token')->first();
+
         return view('mystats', ['api' => $api, 'access_token' => $accessToken]);
 
 
