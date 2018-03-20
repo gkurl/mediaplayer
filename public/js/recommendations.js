@@ -67,7 +67,7 @@ function check () {
                         limit: 10
                     },
                     success: function(data){
-                        recommendations.map(function())
+                        recommendations.map(function(){})
                     }
                 })
 
