@@ -54,7 +54,6 @@ function check () {
         function makeRequest(access_token) {
 
             var str = checkboxesChecked.join();
-            console.log(str);
 
                 $.ajax({
                     type: "GET",
@@ -66,8 +65,8 @@ function check () {
                         seed_tracks: str,
                         limit: 10
                     },
-                    success: function(data){
-                        recommendations.map(function(){})
+                    success: function(data) {
+                        console.log(data);
                     }
                 })
 
