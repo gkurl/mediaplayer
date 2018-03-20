@@ -1,126 +1,95 @@
-var checkboxes = document.getElementsByName('checkbox');
-var unCheckedBoxes = document.querySelectorAll('.checkbox-class:checked');
-var checkboxesChecked = [];
+var checkboxes;
+var checkboxesChecked;
 
-function check() {
-
-// jQuery way to add items and remove on check/uncheck
-
-        /*    $('#checkboxes').on('change', function() {
-                var selectedProducts = [];
-                var listProductsCtrl = $('.list-ids');
-                listProductsCtrl.html(''); //reset the values here
-                $('#checkboxes input[type="checkbox"]:checked').each(function() {
-                    selectedProducts.push($(this).attr('value'));
-                  /!*  var showtimesAsString = selectedProducts.join(', ');
-                    listProductsCtrl.html(showtimesAsString);*!/
-                });
-                console.log(selectedProducts);
-            });*/
-
-// Pure JS way to add items and remove on check/uncheck
+function check () {
 
 
+    function getCheckedBoxes() {
 
-
-
-
-        /* for (i = 0; i < checkboxes.length; i++) {
-
-             checkboxes[i].addEventListener('click', function () {
-
-                 if (this.checked) {
-
-                     vals.push(this.value);
-
-                 } else {
-
-                     vals.splice(vals.indexOf(this.value), 1);
-                 }
-
-                 if (vals.length >= 1) {
-
-                     recommendBtn.style.display = 'block';
-
-                 } else {
-
-                     recommendBtn.style.display = 'none';
-
-                 }
-                 console.log(this, vals);
-
-             });
-         }*/
+        checkboxes = document.getElementsByName('checkbox');
+        checkboxesChecked = [];
         var recommendBtn = document.getElementById('getrecommendations');
 
-        function getCheckedBoxes() {
-
-            var checkboxes = document.getElementsByName('checkbox');
-            var unCheckedBoxes = document.querySelectorAll('.checkbox-class:checked');
-            var checkboxesChecked = [];
-
-            // loop over them all
-            for (var i = 0; i < checkboxes.length; i++) {
-                // And stick the value of checked ones onto an array
-                if (checkboxes[i].checked) {
-                    checkboxesChecked.push(checkboxes[i].value);
-                    //else remove the unselected value chosen by user using this
-                } else {
-                    checkboxesChecked.splice(checkboxesChecked.indexOf(this.value), 0);
-                }
-                if (checkboxesChecked.length >= 1) {
-                    recommendBtn.style.display = 'block';
-                } else {
-                    recommendBtn.style.display = 'none';
-                }
-                if (checkboxesChecked.length > 4) {
-                    stopCheck();
-                }
+        // loop over them all
+        for (var i = 0; i < checkboxes.length; i++) {
+            // And stick the value of checked ones onto an array
+            if (checkboxes[i].checked) {
+                checkboxesChecked.push(checkboxes[i].value);
+                //else remove the unselected value chosen by user using this
+            } else {
+                checkboxesChecked.splice(checkboxesChecked.indexOf(this.value), 0);
             }
-            // Return the array if it is non-empty, or null
-            return checkboxesChecked.length > 0 ? checkboxesChecked : null;
-
-            function stopCheck() {
-
-                $('.checkbox-class').change(function(){
-                    if($('input.checkbox-class').filter(':checked').length == 5)
-                        $('input.checkbox-class:not(:checked)').attr('disabled', 'disabled');
-                    else
-                        $('input.checkbox-class').removeAttr('disabled');
-                });
-
-
+            if (checkboxesChecked.length >= 1) {
+                recommendBtn.style.display = 'block';
+            } else {
+                recommendBtn.style.display = 'none';
             }
+            if (checkboxesChecked.length > 4) {
+                stopCheck();
+            }
+        }
+        // Return the array if it is non-empty, or null
+
+        return checkboxesChecked.length > 0 ? checkboxesChecked : null;
+
+
+        function stopCheck() {
+
+            $('.checkbox-class').change(function () {
+                if ($('input.checkbox-class').filter(':checked').length == 5)
+                    $('input.checkbox-class:not(:checked)').attr('disabled', 'disabled');
+                else
+                    $('input.checkbox-class').removeAttr('disabled');
+            });
 
 
         }
-
-
-
-// Call as
-
-        var checkedBoxes = getCheckedBoxes("mycheckboxes");
-
-
-
-        console.log(checkedBoxes);
     }
 
-function makeRequest(access_token){
-    $.ajax({
-        type: "GET",
-        url: "https://api.spotify.com/v1/recommendations",
-        headers: {
-            'Authorization': 'Bearer ' + access_token
-        },
-        data: {
-            seed_artists: checkboxesChecked
-        },
-        success: function (response) {
-            console.log(response.headers);
-        }
+    var checkedBoxes = getCheckedBoxes();
+    console.log(checkedBoxes);
+}
 
-    })}
+
+        function makeRequest(access_token) {
+
+            var str = checkboxesChecked.join();
+            console.log(str);
+
+                $.ajax({
+                    type: "GET",
+                    url: "https://api.spotify.com/v1/recommendations",
+                    headers: {
+                        'Authorization': 'Bearer ' + access_token
+                    },
+                    data: {
+                        seed_tracks: str,
+                        limit: 10
+                    },
+                    success: function(data){
+                        recommendations.map(function())
+                    }
+                })
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
