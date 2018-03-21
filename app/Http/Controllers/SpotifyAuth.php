@@ -16,41 +16,42 @@ use App\Http\Controllers\Controller;
 class SpotifyAuth extends Controller
 {
 
-    public function spotifyLogin(){
+    public function spotifyLogin()
+    {
 
-            //set required params for spotify api from env file.
+        //set required params for spotify api from env file.
 
-            $client_id = env('SPOTIFY_KEY');
-            $client_secret = env('SPOTIFY_SECRET');
-            $redirect_uri = env('SPOTIFY_REDIRECT_URI');
+        $client_id = env('SPOTIFY_KEY');
+        $client_secret = env('SPOTIFY_SECRET');
+        $redirect_uri = env('SPOTIFY_REDIRECT_URI');
 
-            //instantiate session for Spotify web API
+        //instantiate session for Spotify web API
 
-            $session = new SpotifyWebAPI\Session(
+        $session = new SpotifyWebAPI\Session(
 
-                $client_id,
-                $client_secret,
-                $redirect_uri
-            );
+            $client_id,
+            $client_secret,
+            $redirect_uri
+        );
 
 
-            //Define scopes for access
+        //Define scopes for access
 
-            $options =[
+        $options = [
 
-                'scope' => ['user-top-read',
-                    'playlist-read-private',
-                    'user-read-private',
-                    'user-follow-read',
-                    'playlist-modify-public',
-                    'playlist-modify-private', ]
-            ];
+            'scope' => ['user-top-read',
+                'playlist-read-private',
+                'user-read-private',
+                'user-follow-read',
+                'playlist-modify-public',
+                'playlist-modify-private',]
+        ];
 
-            //Redirect to authorisation page.
+        //Redirect to authorisation page.
 
-            return redirect($session->getAuthorizeUrl($options));
+        return redirect($session->getAuthorizeUrl($options));
 
-        }
+    }
 
 
     public function retrieveTokens(Request $request)
@@ -89,56 +90,54 @@ class SpotifyAuth extends Controller
         }
 
 
-
-
         //Instantiate API
 
         $api = new SpotifyWebAPI\SpotifyWebAPI();
 
         //Check for access token expiry via try-catch
 
-     /*   try{
-            $api->setAccessToken($accessToken);
+        /*   try{
+               $api->setAccessToken($accessToken);
 
-            $artists = object_get($api->getUserFollowedArtists(), 'artists.items');
+               $artists = object_get($api->getUserFollowedArtists(), 'artists.items');
 
-        } catch (\Exception $e){
-            $session = new \SpotifyWebAPI\Session($client_id, $client_secret, $redirect_uri);
+           } catch (\Exception $e){
+               $session = new \SpotifyWebAPI\Session($client_id, $client_secret, $redirect_uri);
+               $session->refreshAccessToken($refreshToken);
+
+               $accessToken = $session->getAccessToken();
+
+               $api->setAccessToken($accessToken);
+
+               \App\User::where('email', $request->session()->get('email'))->update(['access_token' => $accessToken]);
+
+
+               $artists = object_get($api->getUserFollowedArtists(), 'artists.items');
+           }*/
+
+
+        // Fetch the saved access token from DB.
+
+        $accessToken = \App\User::where('email', $request->session()->get('email'))->pluck('access_token')->first();
+
+        if (empty($accessToken)) {
+
+            $refreshToken = \App\User::where('email', $request->session()->get('email'))->pluck('refresh_token')->first();
+
             $session->refreshAccessToken($refreshToken);
 
             $accessToken = $session->getAccessToken();
 
-            $api->setAccessToken($accessToken);
-
             \App\User::where('email', $request->session()->get('email'))->update(['access_token' => $accessToken]);
 
 
-            $artists = object_get($api->getUserFollowedArtists(), 'artists.items');
-        }*/
-
-
-    // Fetch the saved access token from DB.
-
-       $accessToken = \App\User::where('email', $request->session()->get('email'))->pluck('access_token')->first();
-
-       if (empty($accessToken)){
-
-           $refreshToken = \App\User::where('email', $request->session()->get('email'))->pluck('refresh_token')->first();
-
-           $session->refreshAccessToken($refreshToken);
-
-           $accessToken = $session->getAccessToken();
-
-           \App\User::where('email', $request->session()->get('email'))->update(['access_token' => $accessToken]);
-
-
-       }
+        }
 
         $api->setAccessToken($accessToken);
 
-       //Check for access token expiry and error server-side.
+        //Check for access token expiry and error server-side.
 
-        if (http_response_code(401)){
+        if (http_response_code(401)) {
 
             // Fetch the refresh token from DB.
 
@@ -155,6 +154,10 @@ class SpotifyAuth extends Controller
 
 // Set our new access token on the API wrapper and continue to use the API as usual
             $api->setAccessToken($accessToken);
+
+        } elseif (http_response_code(400)) {
+
+            return redirect($this->spotifyLogin());
         }
 
 
@@ -165,11 +168,6 @@ class SpotifyAuth extends Controller
         return view('mystats', ['api' => $api, 'access_token' => $accessToken]);
 
 
-
-
     }
 
-    public function getRecommends(){}
-
-
-    }
+}

@@ -66,9 +66,14 @@ function check () {
                         limit: 10
                     },
                     success: function(data) {
-                        console.log(data);
+                       console.log(data);
+                       $.each(json.items, function (index, tracks) {
+                           console.log(tracks);
+                           tr = $('<tr/>');
+                           tr.append("<td>" + tracks.name + "</td>")
+                       })
                     }
-                })
+                });
 
 
     }
