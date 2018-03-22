@@ -65,53 +65,16 @@ function check () {
                         seed_tracks: str,
                         limit: 10
                     },
-                    success: function(data) {
-                       console.log(data);
-                       $.each(json.items, function (index, tracks) {
-                           console.log(tracks);
-                           tr = $('<tr/>');
-                           tr.append("<td>" + tracks.name + "</td>")
-                       })
-                    }
-                });
+                    success: function (data) {
+                       //JQuery way of doing it + html method OR empty array before appending using .empty().append
+                        $('#ct').html(
+                            $.map(data.tracks, function (tracks, index) {
+                                return '<tr><td>' + "<a target=\"_blank\" href=\"" + data.tracks[index].external_urls.spotify + '\"' + "/a>" + data.tracks[index].name + '</td></tr>';
+                            }));
+                        console.log(data);
 
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-           /* } if(vals.length >= 1){
-
-                recommendBtn.style.display = 'block';
-
-            } if(vals.length == 0){
-                alert ('it\s empty bitch');
-            }
-        console.log(vals);*/
-
-
-
+                        }
+                })}
 
            /* if (checkboxes[i].checked) {
                 vals.push(checkboxes[i].value);

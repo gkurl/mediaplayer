@@ -48,9 +48,8 @@ foreach ($tracks as $track){
     <div class="spotify-button recommendations" id="getrecommendations" style="display: none;"> <h2>Get Recommendations</h2>
         <script>var access_token = "<?php echo $access_token; ?>";</script>
         <input type="button" id="request" value="Fetch" onclick="makeRequest(access_token)">
-        <ul id="recommendations">
+        <ul id="ct"></ul>
 
-        </ul>
     </div>
 @endsection
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
