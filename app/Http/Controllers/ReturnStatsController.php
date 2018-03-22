@@ -7,9 +7,10 @@ use SpotifyWebAPI;
 
 class ReturnStatsController extends Controller
 {
-    public function returnStats(\GuzzleHttp\Client $httpClient)
+    public function returnRecommends()
 
     {
+
 
 
 

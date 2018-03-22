@@ -56,6 +56,11 @@ class SpotifyAuth extends Controller
 
     public function retrieveTokens(Request $request)
     {
+
+        //Instantiate API
+
+        $api = new SpotifyWebAPI\SpotifyWebAPI();
+
         //Start Spotify API session
 
         $client_id = env('SPOTIFY_KEY');
@@ -89,14 +94,9 @@ class SpotifyAuth extends Controller
             \App\User::where('email', $request->session()->get('email'))->update(['access_token' => $accessToken, 'refresh_token' => $refreshToken]);
         }
 
-
-        //Instantiate API
-
-        $api = new SpotifyWebAPI\SpotifyWebAPI();
-
         //Check for access token expiry via try-catch
 
-        /*   try{
+          try{
                $api->setAccessToken($accessToken);
 
                $artists = object_get($api->getUserFollowedArtists(), 'artists.items');
@@ -113,7 +113,7 @@ class SpotifyAuth extends Controller
 
 
                $artists = object_get($api->getUserFollowedArtists(), 'artists.items');
-           }*/
+           }
 
 
         // Fetch the saved access token from DB.
@@ -132,10 +132,6 @@ class SpotifyAuth extends Controller
 
 
         }
-
-        $api->setAccessToken($accessToken);
-
-        //Check for access token expiry and error server-side.
 
         if (http_response_code(401)) {
 

@@ -44,6 +44,7 @@ foreach ($tracks as $track){
     <!-- End top track section !-->
 
 </br> <h4>Start building your custom lists from the suggestions below once selections have been made above</h4>
+    <p>If for some reason the recommendations do not appear, try refreshing the page</p>
 
     <div class="spotify-button recommendations" id="getrecommendations" style="display: none;"> <h2>Get Recommendations</h2>
         <script>var access_token = "<?php echo $access_token; ?>";</script>
