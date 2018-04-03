@@ -29,6 +29,7 @@
 
     <div id="checkbox">
         <ul id="checkboxes">
+
 <?php
 $tracks = $api->getMyTop('tracks')->items;
 shuffle($tracks);
